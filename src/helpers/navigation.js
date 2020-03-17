@@ -7,7 +7,7 @@ import pages from "../constants/pages";
 const getMenuNavigation = () => {
     return pages.map((page) => {
         return (
-            <MenuItem text={page.text} href={page.path}/>
+            <MenuItem text={page.text} icon={page.icon} href={page.path}/>
         );
     });
 }
