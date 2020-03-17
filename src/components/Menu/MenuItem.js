@@ -3,14 +3,17 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { ListItemIcon, ListItemText, ListItem } from '@material-ui/core';
 import { NavLink } from 'react-router-dom';
-import { menuIconColor, menuTextColor } from '../../constants/styles';
+import { itemInactiveColor, itemActiveColor } from '../../constants/styles';
 
 const useStyles = makeStyles(theme => ({
-    iconColor: {
-        color: menuIconColor,
+    inactiveItem: {
+        textDecoration: 'none',
+        '& svg': { color: itemInactiveColor },
+        '& span': { color: itemInactiveColor },        
     },
-    textColor: {
-        color: menuTextColor,
+    activeItem: {
+        '& svg': { color: itemActiveColor },
+        '& span': { color: itemActiveColor },
     }
 }));
 
@@ -19,14 +22,18 @@ const MenuItem = (props) => {
     const styles = useStyles();
 
     return (
-        <NavLink to={href}>
+        <NavLink
+            to={href}
+            className={styles.inactiveItem}
+            activeClassName={styles.activeItem}
+        >
             <ListItem>
                 <ListItemIcon>
                     {
-                        React.createElement( icon, { className: styles.iconColor } )
+                        React.createElement( icon )
                     }
                 </ListItemIcon>
-                <ListItemText primary={text} className={styles.textColor}/>
+                <ListItemText primary={text}/>
             </ListItem>
         </NavLink>
     );
