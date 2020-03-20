@@ -1,9 +1,8 @@
-// https://plantsdb.xyz/search
 import React, { PureComponent } from 'react'
 
-import fetch from 'node-fetch';
 import { getPlants } from '../../helpers/dataFetch';
-import PlantCard from '../PlantCard';
+import PlantCard from '../../components/PlantCard';
+import { Grid } from '@material-ui/core';
 
 class Encyclopedia extends PureComponent {
     constructor(props) {
@@ -20,21 +19,25 @@ class Encyclopedia extends PureComponent {
                 plants: plants,
             });
         })
-        // https://en.wikipedia.org/w/api.php?action=opensearch&search=apple&limit=1&namespace=0&format=json
-        // fetch('https://en.wikipedia.org/wiki/action=query&titles=Albert%20Einstein&format=json&prop=images').then((response) => {
-        //     console.log(response);
-        // })
+    }
+
+    renderGridTile = (plant) => {
+        return (
+            <Grid item xs={4}>
+                <PlantCard plant={plant}/>
+            </Grid>
+        );
     }
 
     render() {
         const { plants } = this.state;
-        console.log(plants)
+        
         return (
-            <div>
-                { plants.map((x) => <PlantCard plantName={x.Common_Name}/>) }
-            </div>
+            <Grid container spacing={3}>
+                { plants.map((x) => this.renderGridTile(x)) }
+            </Grid>
         )
     }
 }
 
-export default Encyclopedia
+export default Encyclopedia;
