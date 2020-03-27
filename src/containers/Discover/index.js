@@ -1,9 +1,10 @@
+import React, { PureComponent } from 'react'
 import * as mobilenet from '@tensorflow-models/mobilenet';
 // import * as tf from '@tensorflow/tfjs-node';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
-import React, { PureComponent } from 'react'
-import { Button } from '@material-ui/core';
+import { Button, Container, CircularProgress } from '@material-ui/core';
 import ImageForm from '../../components/ImageForm';
+import ClassificationCard from '../../components/ClassificationCard';
 
 let net;
 const classifier = knnClassifier.create();
@@ -18,44 +19,58 @@ export class Discover extends PureComponent {
         };
     }
 
-    // async componentDidMount() {
-    //     console.log('Loading mobilenet..');
+    async componentDidMount() {
+        console.log('Loading mobilenet..');
     
-    //     // Load the model.
-    //     net = await mobilenet.load();
-    //     console.log('Successfully loaded model');
-
-    //     this.setState({
-    //         loading: false,
-    //     });
-    // }
-    
-    classifyImage = async () => {
-        // Make a prediction through the model on our image.
-        const imgEl = document.getElementById('img');
-
-        const result = await net.classify(imgEl);
-        console.log(result);
+        // Load the model.
+        net = await mobilenet.load();
+        console.log('Successfully loaded model');
 
         this.setState({
-            lastClassify: result,
+            loading: false,
         });
-        // imgEl
-        // const activation = net.infer(img, 'conv_preds');
+    }
+    
+    classifyImage = async (imageID) => {
+        const imgEl = document.getElementById(imageID);
 
-        // classifier.addExample(activation, classId);
+        if (imgEl) {
+            const result = await net.classify(imgEl);
+            console.log(result);
+    
+            this.setState({
+                lastClassify: result,
+            });
+        }
+    }
+
+    buildLoadingContent = () => {
+        return (
+            <CircularProgress/>
+        );
+    }
+
+    buildFormContent = () => {
+        return (
+            <ImageForm handleSubmit={this.classifyImage}/>
+        );
     }
 
     render() {
-        const { lastClassify } = this.state;
+        const { loading, lastClassify } = this.state;
         
         return (
-            <>
-                {/* <img id="img" src={`${process.env.PUBLIC_URL}/20733335929_0100f38c4a_n.jpg`} width="227" height="227"/>
-                <Button onClick={this.classifyImage}>Press me</Button>
-                <p id='text'>{ lastClassify }</p> */}
-                <ImageForm handleSubmit={(image) => console.log(image)}/>
-            </>
+
+            <Container>
+                {
+                    loading
+                        ? this.buildLoadingContent()
+                        : this.buildFormContent()
+                }
+                {
+                    lastClassify && lastClassify.map((x) => <ClassificationCard classification={x}/>)
+                }
+            </Container>
         )
     }
 }

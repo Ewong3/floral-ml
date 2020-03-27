@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 
 import { getPlants } from '../../helpers/dataFetch';
 import PlantCard from '../../components/PlantCard';
-import { Grid } from '@material-ui/core';
+import { Grid, Container } from '@material-ui/core';
 
 class Encyclopedia extends PureComponent {
     constructor(props) {
@@ -33,10 +33,12 @@ class Encyclopedia extends PureComponent {
         const { plants } = this.state;
         
         return (
-            <Grid container spacing={3}>
-                { plants.map((x) => this.renderGridTile(x)) }
-            </Grid>
-        )
+            <Container>
+                <Grid container spacing={3}>
+                    { plants.map((x) => this.renderGridTile(x)) }
+                </Grid>
+            </Container>
+        );
     }
 }
 

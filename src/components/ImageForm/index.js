@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { Input, Button, TextField } from '@material-ui/core'
+import { Input, Button, TextField, Grid, List, ListItem } from '@material-ui/core'
 
 export class ImageForm extends PureComponent {
     constructor(props) {
@@ -11,6 +11,7 @@ export class ImageForm extends PureComponent {
     }
 
     onFileChangeHandler = (event) => {
+        const { handleSubmit } = this.props;
         const file = event.target.files[0];
         
         var reader = new FileReader();
@@ -19,29 +20,23 @@ export class ImageForm extends PureComponent {
         reader.onloadend = function (e) {
             this.setState({
                 uploadedFile: [reader.result],
-            })
+            });
+            handleSubmit("image-preview");
         }.bind(this);
-    }
-
-    handleChange = (e) => {
-        const { handleSubmit } = this.props;
-        const { uploadedFile } = this.state;
-
-        e.preventDefault();
-        handleSubmit(uploadedFile);
     }
 
     render() {
         const { uploadedFile } = this.state;
 
         return (
-            <>
-                <form id="image-form" action="/" onSubmit={this.handleChange} method="POST">
+            <List>
+                <ListItem>
                     <Input id="image-field" label="Submit image to classify" type="file" onChange={this.onFileChangeHandler}/>
-                    <Button id="image-submit" type="submit" value="Submit">Submit Image</Button>
-                </form>
-                { uploadedFile && <img src={uploadedFile}/> }
-            </>
+                </ListItem>
+                <ListItem>
+                    { uploadedFile && <img id="image-preview" src={uploadedFile}/> }
+                </ListItem>
+            </List>
         )
     }
 }
