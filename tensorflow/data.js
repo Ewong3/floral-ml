@@ -12,7 +12,7 @@ const ROSE = 'rose';
 const SUNFLOWER = 'sunflower';
 const TULIP = 'tulip';
 
-const FLOWERS = [DAISY, DANDELION];//, ROSE, SUNFLOWER, TULIP];
+const FLOWERS = [DAISY, DANDELION, ROSE, SUNFLOWER, TULIP];
 
 const loadImageFromPath = (filePath) => {
     const canvas = createCanvas(800, 600);
@@ -32,7 +32,6 @@ const loadImages = (prefixPath) => {
 
     FLOWERS.forEach((flower, index) => {
         const flowerPath = path.join(prefixPath, flower);
-        // console.log(flowerPath);
 
         var files = fs.readdirSync(flowerPath);
         
@@ -51,8 +50,6 @@ const loadImages = (prefixPath) => {
             labels.push(index);
         });
     });
-    // console.log(images);
-    // console.log(labels);
     
     return [images, labels];
 }
