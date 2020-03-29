@@ -1,4 +1,4 @@
-const tf = require('@tensorflow/tfjs');
+const tf = require('@tensorflow/tfjs-node');
 const { Image, createCanvas } = require('canvas');
 const fs = require('fs');
 const path = require('path');

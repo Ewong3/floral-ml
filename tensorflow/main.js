@@ -1,4 +1,4 @@
-const tf = require('@tensorflow/tfjs');
+const tf = require('@tensorflow/tfjs-node');
 
 const data = require('./data');
 const model = require('./model');
@@ -42,9 +42,10 @@ async function run(epochs, batchSize, modelSavePath) {
         `Accuracy = ${evalOutput[1].dataSync()[0].toFixed(3)}`);
   
     if (modelSavePath != null) {
+        model.save
         await model.save(`file://${modelSavePath}`);
         console.log(`Saved model to path: ${modelSavePath}`);
     }
   }
   
-  run(5, 5, './tensorflow/model');
+  run(5, 5, 'tensorflow/model');
