@@ -48,4 +48,4 @@ async function run(epochs, batchSize, modelSavePath) {
     }
   }
   
-  run(5, 5, 'tensorflow/model');
+  run(1, 5, './tensorflow/model');

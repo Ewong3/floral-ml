@@ -24,8 +24,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "training": "node ./tensorflow/main.js",
-    "training-test": "node ./tensorflow/test.js"
+    "training": "node ./tensorflow/main.js"
   },
   "eslintConfig": {
     "extends": "react-app"
