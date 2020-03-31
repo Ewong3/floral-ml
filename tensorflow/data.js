@@ -12,7 +12,7 @@ const ROSE = 'rose';
 const SUNFLOWER = 'sunflower';
 const TULIP = 'tulip';
 
-const FLOWERS = [DAISY, DANDELION];//, ROSE, SUNFLOWER, TULIP];
+const FLOWERS = [DAISY, DANDELION, ROSE, SUNFLOWER, TULIP];
 
 const loadImageFromPath = (filePath) => {
     const canvas = createCanvas(800, 600);
