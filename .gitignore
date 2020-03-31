@@ -3,6 +3,7 @@
 # dependencies
 /.vscode
 /node_modules
+package-lock.json
 /.pnp
 .pnp.js
 
@@ -25,4 +26,3 @@ yarn-error.log*
 
 /tensorflow/data/testing/
 /tensorflow/data/training
-/tensorflow/model

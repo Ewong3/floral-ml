@@ -1,4 +1,4 @@
-const tf = require('@tensorflow/tfjs');
+const tf = require('@tensorflow/tfjs-node');
 
 const kernel_size = [3, 3]
 const pool_size= [2, 2]
