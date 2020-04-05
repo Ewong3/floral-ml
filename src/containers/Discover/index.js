@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react'
 import * as mobilenet from '@tensorflow-models/mobilenet';
-// import * as tf from '@tensorflow/tfjs-node';
+import * as tf from '@tensorflow/tfjs';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
+import * as fs from 'fs';
 import { Button, Container, CircularProgress } from '@material-ui/core';
 import ImageForm from '../../components/ImageForm';
 import ClassificationCard from '../../components/ClassificationCard';
 
-let net;
-const classifier = knnClassifier.create();
+let model;
 
 export class Discover extends PureComponent {
     constructor(props) {
@@ -20,22 +20,28 @@ export class Discover extends PureComponent {
     }
 
     async componentDidMount() {
-        console.log('Loading mobilenet..');
+        console.log('Loading tensorflow model..');
     
-        // Load the model.
-        net = await mobilenet.load();
-        console.log('Successfully loaded model');
+        const MODEL_PATH = 'model/model.json';
 
-        this.setState({
-            loading: false,
-        });
+        try {
+            model = await tf.loadLayersModel(`${process.env}/${MODEL_PATH}`);
+            this.setState({
+                loading: false,
+            });
+        } catch (error) {
+            this.setState({
+                error: true,
+            });
+        }
     }
     
     classifyImage = async (imageID) => {
         const imgEl = document.getElementById(imageID);
 
         if (imgEl) {
-            const result = await net.classify(imgEl);
+            
+            const result = await model.predict(imgEl);
             console.log(result);
     
             this.setState({
