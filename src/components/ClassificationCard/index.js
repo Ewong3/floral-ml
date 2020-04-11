@@ -5,8 +5,8 @@ const ClassificationCard = ({classification}) => {
     return (
         <Card style={{ margin: '50px' }}>
             <CardContent>
-                <p>{ classification.className }</p>
-                <p>{ classification.probability }</p>
+                <p>{ classification.flowerName }</p>
+                <p>{ classification.prediction }</p>
             </CardContent>
         </Card>
     );

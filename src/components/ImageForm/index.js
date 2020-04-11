@@ -16,12 +16,11 @@ export class ImageForm extends PureComponent {
         
         var reader = new FileReader();
         var url = reader.readAsDataURL(file);
-      
         reader.onloadend = function (e) {
             this.setState({
                 uploadedFile: [reader.result],
             });
-            handleSubmit("image-preview");
+            handleSubmit("image-preview", reader.result);
         }.bind(this);
     }
 
