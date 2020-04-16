@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react'
-import * as mobilenet from '@tensorflow-models/mobilenet';
-// import * as tf from '@tensorflow/tfjs-node';
-import * as knnClassifier from '@tensorflow-models/knn-classifier';
-import { Button, Container, CircularProgress } from '@material-ui/core';
+import * as tf from '@tensorflow/tfjs';
+import { Container, CircularProgress } from '@material-ui/core';
 import ImageForm from '../../components/ImageForm';
 import ClassificationCard from '../../components/ClassificationCard';
+import { MODEL_PATH } from '../../constants/tensorflow';
+import { mapPredictions } from '../../helpers/prediction';
 
-let net;
-const classifier = knnClassifier.create();
+let model;
 
 export class Discover extends PureComponent {
     constructor(props) {
@@ -15,31 +14,42 @@ export class Discover extends PureComponent {
 
         this.state = {
             loading: true,
-            lastClassify: '',
+            error: false,
+            lastResult: '',
         };
     }
 
     async componentDidMount() {
-        console.log('Loading mobilenet..');
-    
-        // Load the model.
-        net = await mobilenet.load();
-        console.log('Successfully loaded model');
+        console.log('Loading tensorflow model..');
 
-        this.setState({
-            loading: false,
-        });
+        try {
+            model = await tf.loadLayersModel(`${process.env.PUBLIC_URL}/${MODEL_PATH}`);
+            this.setState({
+                loading: false,
+            });
+        } catch (error) {
+            console.log(error);
+            this.setState({
+                error: true,
+            });
+        }
     }
     
-    classifyImage = async (imageID) => {
+    classifyImage = async (imageID, image) => {
         const imgEl = document.getElementById(imageID);
 
         if (imgEl) {
-            const result = await net.classify(imgEl);
-            console.log(result);
-    
+            var imageTensor = tf.browser.fromPixels(imgEl)
+                .resizeNearestNeighbor([96,96])
+                .toFloat()
+                .div(tf.scalar(255.0))
+                .expandDims();
+            
+            const result = await model.predict(imageTensor).data();
+            const predictions = Array.from(result);
+            console.log(predictions);
             this.setState({
-                lastClassify: result,
+                lastResult: mapPredictions(predictions),
             });
         }
     }
@@ -57,7 +67,7 @@ export class Discover extends PureComponent {
     }
 
     render() {
-        const { loading, lastClassify } = this.state;
+        const { loading, lastResult } = this.state;
         
         return (
 
@@ -68,7 +78,7 @@ export class Discover extends PureComponent {
                         : this.buildFormContent()
                 }
                 {
-                    lastClassify && lastClassify.map((x) => <ClassificationCard classification={x}/>)
+                    lastResult && lastResult.map((x) => <ClassificationCard classification={x}/>)
                 }
             </Container>
         )

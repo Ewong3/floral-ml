@@ -1,5 +1,4 @@
 const tf = require('@tensorflow/tfjs-node');
-const { Image, createCanvas } = require('canvas');
 const fs = require('fs');
 const path = require('path');
 
@@ -14,18 +13,6 @@ const TULIP = 'tulip';
 
 const FLOWERS = [DAISY, DANDELION, ROSE, SUNFLOWER, TULIP];
 
-const loadImageFromPath = (filePath) => {
-    const canvas = createCanvas(800, 600);
-    const ctx = canvas.getContext('2d');
-
-    var img = new Image();
-    img.onload = () => ctx.drawImage(img, 0, 0);
-    img.onerror = err => { throw err };
-    img.src = filePath;
-
-    return canvas;
-}
-
 const loadImages = (prefixPath) => {
     const images = [];
     const labels = [];
@@ -37,10 +24,9 @@ const loadImages = (prefixPath) => {
         
         files.forEach((file) => {
             var filePath = path.join(flowerPath, file);
+            var buffer = fs.readFileSync(filePath);
 
-            const image = loadImageFromPath(filePath);
-
-            var imageTensor = tf.browser.fromPixels(image)
+            var imageTensor = tf.node.decodeImage(buffer)
                 .resizeNearestNeighbor([96,96])
                 .toFloat()
                 .div(tf.scalar(255.0))
@@ -68,14 +54,14 @@ class FlowerDataset {
     getTrainData() {
       return {
         images: tf.concat(this.trainData[0]),
-        labels: tf.oneHot(tf.tensor1d(this.trainData[1], 'int32'), 2).toFloat(),
+        labels: tf.oneHot(tf.tensor1d(this.trainData[1], 'int32'), 5).toFloat(),
       }
     }
   
     getTestData() {
       return {
         images: tf.concat(this.testData[0]),
-        labels: tf.oneHot(tf.tensor1d(this.testData[1], 'int32'), 2).toFloat()
+        labels: tf.oneHot(tf.tensor1d(this.testData[1], 'int32'), 5).toFloat()
       }
     }
   }
