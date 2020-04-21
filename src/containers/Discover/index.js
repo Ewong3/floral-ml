@@ -23,7 +23,7 @@ export class Discover extends PureComponent {
         console.log('Loading tensorflow model..');
 
         try {
-            model = await tf.loadLayersModel(`${process.env.PUBLIC_URL}/${MODEL_PATH}`);
+            model = await tf.loadLayersModel(`${this.process.env.PUBLIC_URL}/${MODEL_PATH}`);
             this.setState({
                 loading: false,
             });
