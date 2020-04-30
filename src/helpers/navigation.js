@@ -6,9 +6,12 @@ import pages from "../constants/pages";
 
 const getMenuNavigation = () => {
     return pages.map((page) => {
-        return (
-            <MenuItem text={page.text} icon={page.icon} href={page.path}/>
-        );
+        if (page.text && page.icon) {
+            return (
+                <MenuItem text={page.text} icon={page.icon} href={page.path}/>
+            );
+        }
+        return null;
     });
 }
 

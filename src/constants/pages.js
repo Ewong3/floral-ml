@@ -11,6 +11,7 @@ const pages = [
     { path: '/home', component: <Home/>, text: 'Home', icon: HomeOutlinedIcon },
     { path: '/discover', component: <Discover/>, text: 'Discover', icon: SearchOutlinedIcon },
     { path: '/encyclopedia', component: <Encyclopedia/>, text: 'Encyclopedia', icon: PublicOutlinedIcon },
+    { path: '/', component: <Home/> },
 ];
 
 export default pages;

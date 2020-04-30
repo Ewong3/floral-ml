@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
       return (
         <AppBar position="fixed" className={styles.appBar}>
             <Toolbar>
-                Text
+                Floral-ML
             </Toolbar>
         </AppBar>
     );
