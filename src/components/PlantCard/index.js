@@ -12,6 +12,19 @@ class PlantCard extends PureComponent {
     }
 
     componentDidMount() {
+        this.loadPlantData();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { plant: prevPlant } = prevProps;
+        const { plant: currPlant } = this.props;
+
+        if (prevPlant.Scientific_Name !== currPlant.Scientific_Name) {
+            this.loadPlantData();
+        }
+    }
+
+    loadPlantData = () => {
         const { plant } = this.props;
 
         getPlantData(plant.Scientific_Name).then((wikiWebsite) => {

@@ -1,17 +1,21 @@
 import fetch from 'node-fetch';
 import { combineUrl } from './strings';
 
-const getPlants = () => {
+const getPlants = (searchParams, offset) => {
     const root = 'https://plantsdb.xyz/search?';
-    const params = {
+
+    const filterParams = {
         'Division': 'Magnoliophyta',
         'fields': 'id,Common_Name,Genera_Binomial_Author,Scientific_Name_x',
         'limit':'9',
-        'offset':'200',
+        'offset': offset || 0,
     };
+
+    const params = Object.assign(filterParams, searchParams || {});
     
     const url = combineUrl(root, params);
 
+    console.log(url);
     return fetch(url).then((response) => {
         return response.json();
     }).then((jsonRes) => {
