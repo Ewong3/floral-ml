@@ -17,7 +17,9 @@ class Encyclopedia extends PureComponent {
 
     onSearchHandle = (type, searchValue) => {
         const searchParams = {};
-        searchParams[type] = searchValue;
+        if (searchValue) {
+            searchParams[type] = searchValue;
+        }
 
         this.loadPlants(searchParams, 0);
     }
