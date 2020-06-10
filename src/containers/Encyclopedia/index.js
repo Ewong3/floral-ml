@@ -1,8 +1,9 @@
 import React, { PureComponent } from 'react'
-
+import { isEqual } from 'underscore';
 import { getPlants } from '../../helpers/dataFetch';
 import PlantCard from '../../components/PlantCard';
 import { Grid, Container } from '@material-ui/core';
+import { Pagination } from '@material-ui/lab';
 import SearchForm from '../../components/SearchForm';
 
 class Encyclopedia extends PureComponent {
@@ -10,9 +11,26 @@ class Encyclopedia extends PureComponent {
         super(props);
 
         this.state = {
+            searchParams: {},
+            page: 1,
             plants: [],
-            page: 0,
         };
+    }
+    
+    componentDidMount() {
+        const { searchParams, page } = this.state;
+
+        this.loadPlants(searchParams, page);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const { searchParams: currSearchParams, page: currPage } = this.state;
+        const { searchParams: prevSearchParams, page: prevPage } = prevState;
+
+        if (!isEqual(currSearchParams, prevSearchParams) || currPage !== prevPage) {
+
+            this.loadPlants(currSearchParams, currPage);
+        }
     }
 
     onSearchHandle = (type, searchValue) => {
@@ -21,17 +39,24 @@ class Encyclopedia extends PureComponent {
             searchParams[type] = searchValue;
         }
 
-        this.loadPlants(searchParams, 0);
+        this.setState({
+            searchParams: searchParams,
+            page: 0,
+        });
+    }
+
+    onPageHandle = (e, newPage) => {
+        this.setState({
+            page: newPage,
+        });
     }
     
-    componentDidMount() {
-        this.loadPlants({}, 0);
-    }
 
     loadPlants = (searchParams, page) => {
         getPlants(searchParams, page).then((plants) => {
             this.setState({
                 plants: plants,
+
             });
         })
     }
@@ -45,7 +70,7 @@ class Encyclopedia extends PureComponent {
     }
 
     render() {
-        const { plants } = this.state;
+        const { plants, page } = this.state;
         
         return (
             <Container>
@@ -53,6 +78,7 @@ class Encyclopedia extends PureComponent {
                 <Grid container spacing={3}>
                     { plants.map((x) => this.renderGridTile(x)) }
                 </Grid>
+                <Pagination count={5} page={page} onChange={this.onPageHandle} />
             </Container>
         );
     }

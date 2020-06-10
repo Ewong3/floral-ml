@@ -8,7 +8,7 @@ const getPlants = (searchParams, offset) => {
         'Division': 'Magnoliophyta',
         'fields': 'id,Common_Name,Genera_Binomial_Author,Scientific_Name_x',
         'limit':'9',
-        'offset': offset || 0,
+        'offset': offset - 1 || 0,
     };
 
     const params = Object.assign(filterParams, searchParams || {});

@@ -1,6 +1,6 @@
 
 import React, { PureComponent } from 'react'
-import { TextField, Select, Button, MenuItem, Grid, Container } from '@material-ui/core';
+import { TextField, Select, Button, MenuItem, Grid } from '@material-ui/core';
 import { searchTypes } from '../../constants/search';
 
 export class SearchForm extends PureComponent {
@@ -21,7 +21,6 @@ export class SearchForm extends PureComponent {
     }
 
     handleTextChange = (event) => {
-        console.log(event.target.value);
         this.setState({
             searchValue: event.target.value
         });
