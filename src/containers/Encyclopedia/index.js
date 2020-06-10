@@ -13,6 +13,7 @@ class Encyclopedia extends PureComponent {
         this.state = {
             searchParams: {},
             page: 1,
+            totalPlants: 0,
             plants: [],
         };
     }
@@ -53,10 +54,11 @@ class Encyclopedia extends PureComponent {
     
 
     loadPlants = (searchParams, page) => {
-        getPlants(searchParams, page).then((plants) => {
+        getPlants(searchParams, page).then((searchResults) => {
+            const { totalPlants, plants } = searchResults;
             this.setState({
-                plants: plants,
-
+                totalPlants,
+                plants,
             });
         })
     }
@@ -70,7 +72,9 @@ class Encyclopedia extends PureComponent {
     }
 
     render() {
-        const { plants, page } = this.state;
+        const { totalPlants, plants, page } = this.state;
+        const totalPages = Math.ceil(totalPlants / 9);
+        
         
         return (
             <Container>
@@ -78,7 +82,7 @@ class Encyclopedia extends PureComponent {
                 <Grid container spacing={3}>
                     { plants.map((x) => this.renderGridTile(x)) }
                 </Grid>
-                <Pagination count={5} page={page} onChange={this.onPageHandle} />
+                <Pagination count={totalPages} siblingCount={3} page={page} onChange={this.onPageHandle} />
             </Container>
         );
     }

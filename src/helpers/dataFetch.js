@@ -15,18 +15,23 @@ const getPlants = (searchParams, offset) => {
     
     const url = combineUrl(root, params);
 
-    console.log(url);
     return fetch(url).then((response) => {
         return response.json();
     }).then((jsonRes) => {
-        return jsonRes.data || [];
-    }).then((plantData) => {
-        return plantData.map((plant) => {
-            return {
-                Common_Name: plant.Common_Name,
-                Scientific_Name: plant.Scientific_Name_x.replace(plant.Genera_Binomial_Author, '').trim(),
-            };
-        })
+        const {count, data} = jsonRes;
+
+        const totalPlants = count || 0;
+        const plantData = data || [];
+
+        return {
+            totalPlants: totalPlants,
+            plants: plantData.map((plant) => {
+                return {
+                    Common_Name: plant.Common_Name,
+                    Scientific_Name: plant.Scientific_Name_x.replace(plant.Genera_Binomial_Author, '').trim(),
+                }
+            })
+        }
     }).catch((err) => {
         console.log(err);
         return Promise.reject(err);
